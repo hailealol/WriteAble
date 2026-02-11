@@ -1,18 +1,7 @@
 """
 WriteAble UI Preview (Standalone Version)
 -----------------------------------------
-This file is a self-contained preview of the WriteAble interface.
-It is NOT connected to the real PipelineManager or backend logic.
-
-Purpose:
-- Preview the professional UI layout
-- Verify logo placement
-- Test the two-column input layout
-- Show how results will appear in expanders
-
-How to run:
-1. Place 'WriteAble.png' in the SAME folder as this file
-2. Run: streamlit run ui_preview.py
+Streamlit Cloud Ready Version
 """
 
 import streamlit as st
@@ -22,8 +11,6 @@ UI_PAGE_TITLE = "WriteAble Document Analyzer"
 
 
 class UIController:
-    """Standalone UI preview without pipeline dependency."""
-
     def __init__(self):
         self.ui_text_input = ""
         self.ui_uploaded_file = None
@@ -32,7 +19,6 @@ class UIController:
     def ui_main(self):
         st.set_page_config(page_title=UI_PAGE_TITLE, layout="wide")
 
-        # --- Header with logo + title ---
         self._ui_header()
 
         st.markdown(
@@ -42,7 +28,6 @@ class UIController:
             unsafe_allow_html=True
         )
 
-        # --- Input Section ---
         col1, col2 = st.columns(2)
 
         with col1:
@@ -57,32 +42,23 @@ class UIController:
 
         st.markdown("---")
 
-        # --- Analyze Button ---
         if st.button("Analyze", use_container_width=True):
-            # Fake results for preview purposes
             self.ui_results = {
                 "grammar": ["Missing comma in sentence 2", "Possible run-on sentence"],
                 "clarity": [],
                 "tone": ["Sentence 4 may sound overly formal"]
             }
 
-        # --- Results Section ---
         if self.ui_results:
             self.ui_display_results(self.ui_results)
 
-    # ---------------------------------------------------------
-    # Header with Logo + Title
-    # ---------------------------------------------------------
     def _ui_header(self):
         col_logo, col_title = st.columns([1, 4])
 
         with col_logo:
             logo_path = os.path.join(os.path.dirname(__file__), "WriteAble.png")
-
             if os.path.exists(logo_path):
                 st.image(logo_path, width=140)
-            else:
-                st.warning("WriteAble.png not found in this directory.")
 
         with col_title:
             st.markdown(
@@ -90,9 +66,6 @@ class UIController:
                 unsafe_allow_html=True
             )
 
-    # ---------------------------------------------------------
-    # File Upload
-    # ---------------------------------------------------------
     def ui_upload_file(self):
         uploaded = st.file_uploader(
             "Upload a document",
@@ -107,10 +80,10 @@ class UIController:
                 return uploaded.read().decode("utf-8", errors="ignore")
 
             if uploaded.type == "application/pdf":
-                return "PDF uploaded (text extraction not implemented yet)."
+                return "PDF uploaded (preview mode)."
 
             if uploaded.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                return "DOCX uploaded (text extraction not implemented yet)."
+                return "DOCX uploaded (preview mode)."
 
         except Exception:
             st.error("Unable to read file.")
@@ -118,15 +91,12 @@ class UIController:
 
         return None
 
-    # ---------------------------------------------------------
-    # Results Display
-    # ---------------------------------------------------------
     def ui_display_results(self, results: dict):
         st.subheader("Analysis Results")
         st.markdown("Review the findings from your document analysis below.")
 
         for section, issues in results.items():
-            with st.expander(section.capitalize(), expanded=False):
+            with st.expander(section.capitalize()):
                 if not issues:
                     st.info("No issues found.")
                 else:
@@ -134,9 +104,6 @@ class UIController:
                         st.write(f"- {issue}")
 
 
-# ---------------------------------------------------------
-# Run the UI
-# ---------------------------------------------------------
 if __name__ == "__main__":
     ui = UIController()
     ui.ui_main()
