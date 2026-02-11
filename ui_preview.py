@@ -75,7 +75,7 @@ class UIController:
         col_logo, col_title = st.columns([1, 4])
 
         with col_logo:
-            st.image("logo.png", width=140)
+            st.image("WriteAble.png", width=140)
 
         with col_title:
             st.markdown(
