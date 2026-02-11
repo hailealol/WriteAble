@@ -11,13 +11,15 @@ Purpose:
 - Show how results will appear in expanders
 
 How to run:
-1. Place 'logo.png' in the same folder as this file
-2. Run:  streamlit run ui_preview.py
+1. Place 'WriteAble.png' in the SAME folder as this file
+2. Run: streamlit run ui_preview.py
 """
 
 import streamlit as st
+import os
 
 UI_PAGE_TITLE = "WriteAble Document Analyzer"
+
 
 class UIController:
     """Standalone UI preview without pipeline dependency."""
@@ -75,7 +77,12 @@ class UIController:
         col_logo, col_title = st.columns([1, 4])
 
         with col_logo:
-            st.image("WriteAble.png", width=140)
+            logo_path = os.path.join(os.path.dirname(__file__), "WriteAble.png")
+
+            if os.path.exists(logo_path):
+                st.image(logo_path, width=140)
+            else:
+                st.warning("WriteAble.png not found in this directory.")
 
         with col_title:
             st.markdown(
@@ -86,54 +93,6 @@ class UIController:
     # ---------------------------------------------------------
     # File Upload
     # ---------------------------------------------------------
-    def ui_upload_file(self):
-        uploaded = st.file_uploader(
-            "Upload a document",
-            type=["txt", "md", "pdf", "docx"]
-        )
-
-        if not uploaded:
-            return None
-
-        try:
-            if uploaded.type in ["text/plain", "text/markdown"]:
-                return uploaded.read().decode("utf-8", errors="ignore")
-
-            if uploaded.type == "application/pdf":
-                return "PDF uploaded (text extraction not implemented yet)."
-
-            if uploaded.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                return "DOCX uploaded (text extraction not implemented yet)."
-
-        except Exception:
-            st.error("Unable to read file.")
-            return None
-
-        return None
-
-    # ---------------------------------------------------------
-    # Results Display
-    # ---------------------------------------------------------
-    def ui_display_results(self, results: dict):
-        st.subheader("Analysis Results")
-        st.markdown("Review the findings from your document analysis below.")
-
-        for section, issues in results.items():
-            with st.expander(section.capitalize(), expanded=False):
-                if not issues:
-                    st.info("No issues found.")
-                else:
-                    for issue in issues:
-                        st.write(f"- {issue}")
-
-
-# ---------------------------------------------------------
-# Run the UI
-# ---------------------------------------------------------
-if __name__ == "__main__":
-    ui = UIController()
-    ui.ui_main()
-
     def ui_upload_file(self):
         uploaded = st.file_uploader(
             "Upload a document",
