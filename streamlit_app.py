@@ -254,6 +254,7 @@ elif page == "Full User Guide":
 # ------------------------------------------------------------
 elif page == "About Us":
     st.title("About WriteAble")
+    st.success("TEST: Running from hailealol/WriteAble repo ✔")
 
     st.markdown("""
         WriteAble is designed to help people create documents that are clearer, more inclusive,
