@@ -81,7 +81,8 @@ page = st.sidebar.selectbox(
 # ------------------------------------------------------------
 if page == "Overview":
     st.title("WriteAble – Accessible Document Helper")
-
+st.success("TEST: Running from hailealol/WriteAble repo ✔")
+    
     st.markdown("""
         WriteAble helps people create clearer, more inclusive, and more accessible documents.
 
